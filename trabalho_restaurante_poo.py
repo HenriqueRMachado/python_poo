@@ -12,8 +12,7 @@ class funcionarios_restaurante:
 
         self.lista = []
 
-        self.funcionarios = [
-            {
+        self.funcionarios = {
             "Gerente": {
                 "id": 1,
                 "nome": "Robson",
@@ -33,7 +32,8 @@ class funcionarios_restaurante:
                 
             }
         }
-        ]
+
+        
         
     @property
     def nome(self):
@@ -101,10 +101,13 @@ class funcionarios_restaurante:
     def cadastra_funcionarios(self):
         if self.cargo == "cozinheiro":
             novo_id = len(self.funcionarios) + 1
-            adiciona_funcionario = {"cozinheiro": {f"id": novo_id, "nome": self.nome, "idade": self.idade, "CPF": self.cpf, "celular": self.celular, "RG": self.rg, "cargo": self.cargo}}
+            adiciona_funcionario = {f"id": novo_id, "nome": self.nome, "idade": self.idade, "CPF": self.cpf, "celular": self.celular, "RG": self.rg, "cargo": self.cargo}
 
-            self.funcionarios.append(adiciona_funcionario)
+            self.funcionarios["Cozinheiro"] = adiciona_funcionario
 
+            print(self.funcionarios)
+
+            # o metodo de cadastrar funcionarios esta funcionando em partes, os atributos estao sendo adicionados no dicionario, mas toda vez que instancia a classe, o dicionario é resetado
 
 
             
