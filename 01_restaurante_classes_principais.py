@@ -40,9 +40,8 @@ class Funcionarios_Restaurante:
     @nome.setter
     def nome(self, novo_nome):
         if not self.__nome:
-            print("nome nao pode ser vazio:")
-        else:
-            self.__nome = novo_nome
+            raise ValueError (Fore.RED + "Nome nao pode ser vazio" + Style.RESET_ALL)
+        self.__nome = novo_nome
 
 
 
@@ -53,11 +52,9 @@ class Funcionarios_Restaurante:
     @idade.setter
     def idade(self, nova_idade):
         if nova_idade < 0:
-            print("idade nao pode ser menor do que zero")
-            return
+            raise ValueError(Fore.RED + "idade nao pode ser negativa" + Style.RESET_ALL)
         elif nova_idade < 14:
-            print("o estabelecimento nao contrata menores de 14 anos")
-            return
+            raise ValueError(Fore.RED + "O estabelecimento nao contrata menores de 14 anos" + Style.RESET_ALL)
         else:
             self.__idade = nova_idade
 
@@ -70,6 +67,8 @@ class Funcionarios_Restaurante:
     
     @cpf.setter
     def cpf(self, novo_cpf):
+        if not novo_cpf:
+            raise ValueError(Fore.RED + "CPF nao pode ser vazio" + Style.RESET_ALL)
         self.__cpf = novo_cpf
 
 
@@ -83,7 +82,8 @@ class Funcionarios_Restaurante:
         self.__celular = novo_celular
 
 
-
+    # os atributos rg e celular nao sao consiferados obrigatorio, por isso no setter nao tem nenhuma validacao que interrompa o cadastro.
+    
     @property
     def rg(self):
         return self.__rg
@@ -151,6 +151,10 @@ class Funcionarios_Restaurante:
 
     def excluir_funcionario(self, id):
         try:
+            
+            if not id:
+                raise ValueError(Fore.RED + "Informe um id" + Style.RESET_ALL)
+            
             funcionario = Funcionarios_Restaurante.funcionarios[f"id{id}"]
             print(Fore.RED + f"tem certeza que deseja excluir este funcionario?: {Style.RESET_ALL} {funcionario}")
             escolha_excluir = int(input("\nInforme 1 para confirmar a exclusao, e 2 para cancelar: "))
@@ -196,7 +200,10 @@ class Clientes_Restaurante:
 
     @nome_cliente.setter
     def nome_cliente(self, novo_nome_cliente):
-        self.__nome_cliente = novo_nome_cliente
+        if not novo_nome_cliente:
+            raise ValueError(Fore.RED + "nome nao pode ser vazio" + Style.RESET_ALL)
+        else:
+            self.__nome_cliente = novo_nome_cliente
 
     
 
@@ -206,7 +213,10 @@ class Clientes_Restaurante:
 
     @cpf_cliente.setter
     def cpf_cliente(self, novo_cpf_cliente):
-        self.__cpf_cliente = novo_cpf_cliente
+        if not novo_cpf_cliente:
+            raise ValueError(Fore.RED + "CPF nao pode ser vazio" + Style.RESET_ALL)
+        else:
+            self.__cpf_cliente = novo_cpf_cliente
     
     
     @property
@@ -301,12 +311,12 @@ class Ingredientes:
         self.leite_qtde = leite_qtde
         self.presunto_qtde = presunto_qtde
 
-        self.agua_qtde = agua_qtde
-        self.agua_com_gas_qtde = agua_com_gas_qtde
-        self.coca_cola_qtde = coca_cola_qtde
-        self.fanta_laranja_qtde = fanta_laranja_qtde
-        self.fanta_uva_qtde = fanta_uva_qtde
-        self.guarana_qtde = guarana_qtde
+        self.agua_qtde = 100
+        self.agua_com_gas_qtde = 40
+        self.coca_cola_qtde = 50
+        self.fanta_laranja_qtde = 30
+        self.fanta_uva_qtde = 35
+        self.guarana_qtde = 20
 
         self.macarrao = "macarrao"
         self.arroz = "arroz"
@@ -421,11 +431,12 @@ class Ingredientes:
             }
         }
 
-    def mostra_estoque(self):
+    def mostrar_estoque(self):
         for chave, valor in self.estoque.items():
             print(f"{chave}: {valor}")
 
-class Fornecedor(Ingredientes):
+
+class Fornecedor(Ingredientes): # heranca 1
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -438,7 +449,7 @@ class Fornecedor(Ingredientes):
 
 
 
-class Pratos(Ingredientes):
+class Pratos(Ingredientes): # heranca 2
     def __init__(self):
         super().__init__()
         
@@ -506,7 +517,7 @@ class Pedidos(Pratos):
         print(f"o preco da conta que devera ser pago é: {preco}")
 
     def mostrar_cardapio(self):
-        print("\n=====PRATOS=====")
+        print(Fore.GREEN + "\n=====PRATOS=====" + Style.RESET_ALL)
         print("1: Da casa: arroz, feijao, macarrao, frango")
         print("2: feijoada: feijao, macarrao, porco")
         print("3: macarronada: macarrao, molho de tomate)")
@@ -514,7 +525,7 @@ class Pedidos(Pratos):
 
         print()
 
-        print("=====BEBIDAS=====")
+        print(Fore.GREEN + "=====BEBIDAS=====" + Style.RESET_ALL)
         print("1: Água")
         print("2: Água com gás")
         print("3: Coca-Cola")
@@ -551,4 +562,3 @@ class Pedidos(Pratos):
                     conta_prato = self.pratos_prontos[cliente_pedido_prato]["preco"]
                     conta_bebida = self.bebidas[cliente_pedido_bebida]["preco"]
                     self.pagar_conta(conta_prato + conta_bebida)
-
