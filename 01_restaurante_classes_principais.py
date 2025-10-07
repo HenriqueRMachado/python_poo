@@ -82,7 +82,7 @@ class Funcionarios_Restaurante:
         self.__celular = novo_celular
 
 
-    # os atributos rg e celular nao sao consiferados obrigatorio, por isso no setter nao tem nenhuma validacao que interrompa o cadastro.
+    # os atributos rg e celular nao sao considerados obrigatorios, por isso no setter nao tem nenhuma validacao que interrompa o cadastro.
     
     @property
     def rg(self):
@@ -232,12 +232,9 @@ class Clientes_Restaurante:
 
 
     def mostrar_todos_clientes(self):
-        try:
             for chave, valor in Clientes_Restaurante.cadastro_clientes.items():
                 print(f"{chave}: {valor}")
                 print()
-        except:
-            print(Fore.RED + "esse id nao esta relacionado a nenhum cliente cadastrado no sistema." + Style.RESET_ALL)
 
     def mostrar_cliente(self, id):
         try:
@@ -263,23 +260,23 @@ class Clientes_Restaurante:
             }
             
         except:
-            print(Fore.RED + "esse id nao esta relacionado a nenhum funcionario cadastrado no sistema." + Style.RESET_ALL)   
+            print(Fore.RED + "Esse id nao esta relacionado a nenhum cliente cadastrado no sistema." + Style.RESET_ALL)   
 
     def excluir_clientes(self, id):
         try:
             cliente = Clientes_Restaurante.cadastro_clientes[f"id{id}"]
-            print(Fore.RED + f"tem certeza que deseja excluir este funcionario?: {Style.RESET_ALL} {cliente}")
+            print(Fore.RED + f"tem certeza que deseja excluir este cliente?: {Style.RESET_ALL} {cliente}")
             escolha_excluir = int(input("\nInforme 1 para confirmar a exclusao, e 2 para cancelar: "))
             match(escolha_excluir):
                 case 1:
                     del Clientes_Restaurante.cadastro_clientes[f"id{id}"]
                     print("Cliente excluído com sucesso.")
                 case 2:
-                    print("a acao foi cancelada, nenhum funcionario excluido")
+                    print("a acao foi cancelada, nenhum cliente excluido")
                 case _:
                     print(Fore.RED + "Esta opcao nao esta disponivel na lista de acoes" + Style.RESET_ALL)
         except:
-            print(Fore.RED + "\nO id nao esta vinculado a nenhum cadastro de funcionarios no sistema." + Style.RESET_ALL)
+            print(Fore.RED + "\nO id nao esta vinculado a nenhum cadastro de clientes no sistema." + Style.RESET_ALL)
     
 class Ingredientes:
     def __init__(self, macarrao_qtde=None, arroz_qtde=None, feijao_qtde=None, batata_qtde=None, farinha_trigo_qtde=None, ovo_qtde=None, leite_qtde=None, manteiga_qtde=None, cenoura_qtde=None, repolho_qtde=None, pepino_qtde=None, tomate_qtde=None, beterraba_qtde=None, brocolis_qtde=None, abobrinha_qtde=None, porco_qtde=None, frango_qtde=None, carne_qtde=None, salmao_qtde=None, presunto_qtde=None, massa_lasanha_qtde=None, queijo_mussarela_qtde=None, queijo_parmesao_qtde=None, molho_tomate_qtde=None, creme_leite_qtde=None, batata_palha_qtde=None, cogumelo_qtde=None, agua_qtde=None, agua_com_gas_qtde=None, coca_cola_qtde=None, fanta_laranja_qtde=None, fanta_uva_qtde=None, guarana_qtde=None):

@@ -27,7 +27,7 @@ def funcoes_cadastro_clientes():
                 case 1:
                     
                     try:
-                        print("\nPreencha as informações para cadastrar um funcionario: ")
+                        print("\nPreencha as informações para cadastrar um cliente: ")
                         nome = input("\nInforme o nome do cliente: ")
                         cpf = input("Informe o CPF do cliente: ")
                         celular = input("Informe o telefone do cliente: ")
@@ -56,8 +56,6 @@ def funcoes_cadastro_clientes():
                     elif not id_clientes_consulta:
                             print("id nao pode ser vazio")
                             return
-                    elif id_clientes_consulta < 3:
-                            print("Os ids 1 e 2 nao podem ser alterados")
                     else:
                         consulta_cliente = classe_funcionarios.Clientes_Restaurante(None, None, None)
                         consulta_cliente.mostrar_cliente(id_clientes_consulta)
