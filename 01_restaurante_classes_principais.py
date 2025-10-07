@@ -133,30 +133,32 @@ class Funcionarios_Restaurante:
     def alterar_funcionario(self, id):
         try:
             
-            lista = ["cozinheiro", "cozinheira", "garcom", "garçom", "garconete", "garçonete", "recepcionista"]
-            if self.cargo in lista:
+            if f"id{id}" in Funcionarios_Restaurante.funcionarios:
                 
-                Funcionarios_Restaurante.funcionarios[f"id{id}"] = {
-                    "nome": self.nome,
-                    "idade": self.idade,
-                    "CPF": self.cpf,
-                    "celular": self.celular,
-                    "RG": self.rg,
-                    "cargo": self.cargo
-                }
-            
-
+                lista = ["cozinheiro", "cozinheira", "garcom", "garçom", "garconete", "garçonete", "recepcionista"]
+                if self.cargo in lista:
+                    
+                    Funcionarios_Restaurante.funcionarios[f"id{id}"] = {
+                        "nome": self.nome,
+                        "idade": self.idade,
+                        "CPF": self.cpf,
+                        "celular": self.celular,
+                        "RG": self.rg,
+                        "cargo": self.cargo
+                    }
+                
+            else:
+                print(Fore.RED + "esse id nao esta relacionado a nenhum funcionario cadastrado no sistema." + Style.RESET_ALL)
         except:
             print(Fore.RED + "esse id nao esta relacionado a nenhum funcionario cadastrado no sistema." + Style.RESET_ALL)
 
     def excluir_funcionario(self, id):
         try:
             
-            if not id:
-                raise ValueError(Fore.RED + "Informe um id" + Style.RESET_ALL)
             
             funcionario = Funcionarios_Restaurante.funcionarios[f"id{id}"]
             print(Fore.RED + f"tem certeza que deseja excluir este funcionario?: {Style.RESET_ALL} {funcionario}")
+            
             escolha_excluir = int(input("\nInforme 1 para confirmar a exclusao, e 2 para cancelar: "))
             match(escolha_excluir):
                 case 1:
