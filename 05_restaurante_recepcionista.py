@@ -50,8 +50,17 @@ def funcoes_cadastro_clientes():
                     print(Fore.RED + "\nAtencao, para consultar um cliente especifico, e necessario o id. Para saber o id, execute a acao 2 e consulte os clientes cadastrados!" + Style.RESET_ALL)
 
                     id_clientes_consulta = int(input("Informe o id do cliente que deseja consultar no sistema:"))
-                    consulta_cliente = classe_funcionarios.Clientes_Restaurante(None, None, None)
-                    consulta_cliente.mostrar_cliente(id_clientes_consulta)
+                    
+                    if id_clientes_consulta <= 0:
+                            print("Os ids comecam a partir de 1")
+                    elif not id_clientes_consulta:
+                            print("id nao pode ser vazio")
+                            return
+                    elif id_clientes_consulta < 3:
+                            print("Os ids 1 e 2 nao podem ser alterados")
+                    else:
+                        consulta_cliente = classe_funcionarios.Clientes_Restaurante(None, None, None)
+                        consulta_cliente.mostrar_cliente(id_clientes_consulta)
                     
                 case 4:
                     try:
@@ -59,12 +68,12 @@ def funcoes_cadastro_clientes():
                     
                         id_cliente_alterar = int(input("\nInforme o id do funcionario que deseja alterar no sistema: "))
                         
-                        if not id_cliente_alterar:
+                        
+                        if id_cliente_alterar <= 0:
+                            print("Os ids comecam a partir de 1")
+                        elif not id_cliente_alterar:
                             print("id nao pode ser vazio")
                             return
-                        
-                        if id_cliente_alterar < 0:
-                            print("Os ids comecam a partir de 1")
                         elif id_cliente_alterar < 3:
                             print("Os ids 1 e 2 nao podem ser alterados")
                         else:
@@ -87,12 +96,13 @@ def funcoes_cadastro_clientes():
                         print(error)
                 case 5:
                     id_exclui_clientes = int(input("Informe o id do cliente que deseja excluir: "))
-                    if not id_exclui_clientes:
+
+                                        
+                    if id_exclui_clientes <= 0:
+                        print("Os ids comecam a partir de 1")
+                    elif not id_exclui_clientes:
                         print("id nao pode ser vazio")
                         return
-                                        
-                    if id_exclui_clientes < 0:
-                        print("Os ids comecam a partir de 1")
                     elif id_exclui_clientes < 3:
                         print("Os ids 1 e 2 nao podem ser excluidos")
                     else:
