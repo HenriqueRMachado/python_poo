@@ -123,3 +123,4 @@ def funcoes_cadastro_clientes():
 
 if __name__ == '__main__':
     funcoes_cadastro_clientes()
+
