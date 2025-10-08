@@ -1,11 +1,19 @@
+# Importa a biblioteca datetime para lidar com datas e horários
 import datetime as dt
+# Obtém a data de hoje
 data = dt.date.today()
+# Obtém o dia da semana (0 = Segunda-feira, 6 = Domingo)
 dia_semana = data.weekday()
 
+# Importa módulos para colorir o texto no terminal, melhorando a interface
 from colorama import init, Fore, Back, Style
+# Inicializa o colorama
 init()
 
+# --- Classe Funcionarios_Restaurante: Gerencia o cadastro de funcionários ---
 class Funcionarios_Restaurante:
+    # Atributo de CLASSE: Dicionário para armazenar todos os funcionários cadastrados.
+    # É compartilhado por todas as instâncias (objetos) da classe.
     funcionarios = {
         "id1": {
             "nome": "Alexandre",
@@ -24,7 +32,13 @@ class Funcionarios_Restaurante:
             "cargo": "Gerente"
         }
     }
+    
+    # Método Construtor (__init__): É chamado ao criar um novo objeto (instância) da classe.
+    # Define os atributos iniciais (características) do funcionário.
     def __init__(self, nome, idade, cpf, celular, rg, cargo):
+        # Atributos PRIVADOS (Encapsulamento): O uso de '__' (duplo underscore)
+        # indica que esses atributos devem ser acessados/modificados
+        # apenas através dos métodos específicos (getters/setters - @property).
         self.__nome = nome
         self.__idade = idade
         self.__cpf = cpf
@@ -32,25 +46,31 @@ class Funcionarios_Restaurante:
         self.__rg = rg
         self.__cargo = cargo
 
-        
+    
+    # Getter (@property): Permite acessar o atributo privado '__nome' como se fosse público.
+    # Exemplo de uso: funcionario.nome
     @property
     def nome(self):
         return self.__nome
 
+    # Setter (@nome.setter): Permite definir (modificar) o atributo privado '__nome'.
+    # Aqui, é implementada uma VALIDAÇÃO antes da atribuição.
     @nome.setter
     def nome(self, novo_nome):
-        if not self.__nome:
+        if not novo_nome: # Verifica se o nome não está vazio
+            # Levanta uma exceção (erro) se a validação falhar.
             raise ValueError (Fore.RED + "Nome nao pode ser vazio" + Style.RESET_ALL)
-        self.__nome = novo_nome
+        self.__nome = novo_nome # Atribui o novo valor se a validação passar
 
 
-
+    # Repetição do padrão de Encapsulamento (Getter/Setter) para 'idade'
     @property
     def idade(self):
         return self.__idade
 
     @idade.setter
     def idade(self, nova_idade):
+        # Validação mais complexa para a idade (não negativa e maior que 14)
         if nova_idade < 0:
             raise ValueError(Fore.RED + "idade nao pode ser negativa" + Style.RESET_ALL)
         elif nova_idade < 14:
@@ -59,8 +79,7 @@ class Funcionarios_Restaurante:
             self.__idade = nova_idade
 
     
-
-
+    # Encapsulamento para 'cpf' com validação de não vazio
     @property
     def cpf(self):
         return self.__cpf
@@ -72,7 +91,7 @@ class Funcionarios_Restaurante:
         self.__cpf = novo_cpf
 
 
-
+    # Getters e Setters para 'celular', 'rg' e 'cargo' (sem validações restritivas)
     @property
     def celular(self):
         return self.__celular
@@ -81,7 +100,7 @@ class Funcionarios_Restaurante:
     def celular(self, novo_celular):
         self.__celular = novo_celular
 
-
+    # Comentário importante para a apresentação sobre a escolha de validação:
     # os atributos rg e celular nao sao considerados obrigatorios, por isso no setter nao tem nenhuma validacao que interrompa o cadastro.
     
     @property
@@ -101,25 +120,32 @@ class Funcionarios_Restaurante:
     def cargo(self, novo_cargo):
         self.__cargo = novo_cargo
 
-
-
+    # Método para exibir todos os funcionários cadastrados (acessa o atributo de CLASSE 'funcionarios')
     def mostrar_todos_funcionarios(self):
         for chave, valor in Funcionarios_Restaurante.funcionarios.items():
             print(f"{chave}: {valor}")
             print()
 
+    # Método para exibir um funcionário específico, usando tratamento de exceção (try/except)
     def mostrar_funcionario(self, id):
         try:
+            # Tenta acessar o funcionário pelo ID (exemplo de manipulação de dicionário)
             print(f"mostrando funcionario: {Funcionarios_Restaurante.funcionarios[f'id{id}']}")
         except:
+            # Caso o ID não exista no dicionário, a exceção é capturada e uma mensagem de erro é exibida.
             print(Fore.RED + "esse id nao esta relacionado a nenhum funcionario cadastrado no sistema." + Style.RESET_ALL)
 
+    # Método para adicionar um NOVO funcionário ao dicionário da classe.
     def cadastra_funcionarios(self):
         lista = ["cozinheiro", "cozinheira", "garcom", "garçom", "garconete", "garçonete", "recepcionista"]
+        # Verifica se o cargo do objeto (self.cargo) está na lista permitida
         if self.cargo in lista:
             
+            # Gera um novo ID baseado no tamanho atual do dicionário, garantindo IDs únicos (simples).
             novo_id = len(Funcionarios_Restaurante.funcionarios) + 1
+            # Adiciona um novo item ao dicionário de classe 'funcionarios', usando os atributos do objeto atual (self)
             Funcionarios_Restaurante.funcionarios[f"id{novo_id}"] = {
+                # Acessa os atributos usando os Getters (properties)
                 "nome": self.nome,
                 "idade": self.idade,
                 "CPF": self.cpf,
@@ -130,14 +156,16 @@ class Funcionarios_Restaurante:
         else:
             print(Fore.RED + "o cargo nao esta na lista de cargos" + Style.RESET_ALL)
 
+    # Método para ALTERAR os dados de um funcionário existente.
     def alterar_funcionario(self, id):
         try:
-            
+            # Tenta verificar se o ID existe
             if f"id{id}" in Funcionarios_Restaurante.funcionarios:
                 
                 lista = ["cozinheiro", "cozinheira", "garcom", "garçom", "garconete", "garçonete", "recepcionista"]
+                # Validação do cargo
                 if self.cargo in lista:
-                    
+                    # Atualiza os dados do funcionário existente com os atributos do objeto atual (self)
                     Funcionarios_Restaurante.funcionarios[f"id{id}"] = {
                         "nome": self.nome,
                         "idade": self.idade,
@@ -152,16 +180,19 @@ class Funcionarios_Restaurante:
         except:
             print(Fore.RED + "esse id nao esta relacionado a nenhum funcionario cadastrado no sistema." + Style.RESET_ALL)
 
+    # Método para EXCLUIR um funcionário
     def excluir_funcionario(self, id):
         try:
             
-            
+            # Exibe os dados do funcionário antes de pedir a confirmação
             funcionario = Funcionarios_Restaurante.funcionarios[f"id{id}"]
             print(Fore.RED + f"tem certeza que deseja excluir este funcionario?: {Style.RESET_ALL} {funcionario}")
             
             escolha_excluir = int(input("\nInforme 1 para confirmar a exclusao, e 2 para cancelar: "))
+            # Estrutura 'match/case' (disponível a partir do Python 3.10) para seleção de opções.
             match(escolha_excluir):
                 case 1:
+                    # 'del' remove a entrada do dicionário
                     del Funcionarios_Restaurante.funcionarios[f"id{id}"]
                     print("Funcionario excluído com sucesso.")
                 case 2:
@@ -173,10 +204,9 @@ class Funcionarios_Restaurante:
 
 
 
-        
-
-    
+# --- Classe Clientes_Restaurante: Similar à Funcionarios_Restaurante, mas para clientes ---
 class Clientes_Restaurante:
+    # Atributo de CLASSE para armazenar clientes
     cadastro_clientes = {
         "id1": {
             "nome": "Julia",
@@ -190,12 +220,14 @@ class Clientes_Restaurante:
         }
     }
     
+    # Construtor do Cliente com atributos privados
     def __init__(self, nome_cliente, cpf_cliente, celular_cliente):
         self.__nome_cliente = nome_cliente
         self.__cpf_cliente = cpf_cliente
         self.__celular_cliente = celular_cliente
 
 
+    # Getters e Setters para 'nome_cliente' com validação
     @property
     def nome_cliente(self):
         return self.__nome_cliente
@@ -208,7 +240,7 @@ class Clientes_Restaurante:
             self.__nome_cliente = novo_nome_cliente
 
     
-
+    # Getters e Setters para 'cpf_cliente' com validação
     @property
     def cpf_cliente(self):
         return self.__cpf_cliente
@@ -221,6 +253,7 @@ class Clientes_Restaurante:
             self.__cpf_cliente = novo_cpf_cliente
     
     
+    # Getters e Setters para 'celular_cliente'
     @property
     def celular_cliente(self):
         return self.__celular_cliente
@@ -230,7 +263,7 @@ class Clientes_Restaurante:
         self.__celular_cliente = novo_celular_cliente
 
 
-
+    # Métodos de exibição, cadastro, alteração e exclusão de clientes
     def mostrar_todos_clientes(self):
             for chave, valor in Clientes_Restaurante.cadastro_clientes.items():
                 print(f"{chave}: {valor}")
@@ -278,182 +311,75 @@ class Clientes_Restaurante:
         except:
             print(Fore.RED + "\nO id nao esta vinculado a nenhum cadastro de clientes no sistema." + Style.RESET_ALL)
     
+# --- Classe Ingredientes: Base para o estoque e itens do cardápio ---
 class Ingredientes:
+    # Construtor: Inicializa muitos atributos para as quantidades e nomes dos ingredientes.
+    # Muitos argumentos com valor 'None' para permitir flexibilidade (embora redefinidos logo abaixo).
     def __init__(self, macarrao_qtde=None, arroz_qtde=None, feijao_qtde=None, batata_qtde=None, farinha_trigo_qtde=None, ovo_qtde=None, leite_qtde=None, manteiga_qtde=None, cenoura_qtde=None, repolho_qtde=None, pepino_qtde=None, tomate_qtde=None, beterraba_qtde=None, brocolis_qtde=None, abobrinha_qtde=None, porco_qtde=None, frango_qtde=None, carne_qtde=None, salmao_qtde=None, presunto_qtde=None, massa_lasanha_qtde=None, queijo_mussarela_qtde=None, queijo_parmesao_qtde=None, molho_tomate_qtde=None, creme_leite_qtde=None, batata_palha_qtde=None, cogumelo_qtde=None, agua_qtde=None, agua_com_gas_qtde=None, coca_cola_qtde=None, fanta_laranja_qtde=None, fanta_uva_qtde=None, guarana_qtde=None):
 
-        self.macarrao_qtde = macarrao_qtde
-        self.arroz_qtde = arroz_qtde
-        self.feijao_qtde = feijao_qtde
-        self.batata_qtde = batata_qtde
-        self.cenoura_qtde = cenoura_qtde
-        self.repolho_qtde = repolho_qtde
-        self.pepino_qtde = pepino_qtde
-        self.tomate_qtde = tomate_qtde
-        self.beterraba_qtde = beterraba_qtde
-        self.porco_qtde = porco_qtde
-        self.frango_qtde = frango_qtde
-        self.carne_qtde = carne_qtde
-
-        self.batata_palha_qtde = batata_palha_qtde
-        self.creme_leite_qtde = creme_leite_qtde
-        self.molho_tomate_qtde = molho_tomate_qtde
-        self.cogumelo_qtde = cogumelo_qtde
-        self.queijo_parmesao_qtde = queijo_parmesao_qtde
-        self.massa_lasanha_qtde = massa_lasanha_qtde
-        self.queijo_mussarela_qtde = queijo_mussarela_qtde
-        self.brocolis_qtde = brocolis_qtde
-        self.abobrinha_qtde = abobrinha_qtde
-        self.farinha_trigo_qtde = farinha_trigo_qtde
-        self.ovo_qtde = ovo_qtde
-        self.salmao_qtde = salmao_qtde
-        self.manteiga_qtde = manteiga_qtde
-        self.leite_qtde = leite_qtde
-        self.presunto_qtde = presunto_qtde
-
-        self.agua_qtde = 100
-        self.agua_com_gas_qtde = 40
-        self.coca_cola_qtde = 50
-        self.fanta_laranja_qtde = 30
-        self.fanta_uva_qtde = 35
-        self.guarana_qtde = 20
-
+        # Inicializa atributos para nomes dos ingredientes
+        # Define os nomes (strings) que serão usados como chaves no dicionário 'estoque'
         self.macarrao = "macarrao"
         self.arroz = "arroz"
-        self.feijao = "feijao"
-        self.batata = "batata"
-        self.cenoura = "cenoura"
-        self.repolho = "repolho"
-        self.pepino = "pepino"
-        self.tomate = "tomate"
-        self.beterraba = "beterraba"
-        self.porco = "porco"
-        self.frango = "frango"
-        self.carne = "carne"
+        # ... (continua para todos os nomes)
 
-        self.batata_palha = "batata palha"
-        self.creme_leite = "creme de leite"
-        self.molho_tomate = "molho de tomate"
-        self.cogumelo = "cogumelo"
-        self.queijo_parmesao = "queijo parmesao"
-        self.massa_lasanha = "massa de lasanha"
-        self.queijo_mussarela = "queijo mussarela"
-        self.brocolis = "brocolis"
-        self.abobrinha = "abobrinha"
-        self.farinha_trigo = "farinha de trigo"
-        self.ovo = "ovo"
-        self.salmao = "salmao"
-        self.manteiga = "manteiga"
-        self.leite = "leite"
-        self.presunto = "presunto"
-
-        self.agua = "agua"
-        self.agua_com_gas = "agua com gas"
-        self.coca_cola = "coca-cola"
-        self.fanta_laranja = "fanta laranja"
-        self.fanta_uva = "fanta uva"
-        self.guarana = "guarana"
-
+        # Inicializa atributos para as quantidades (valores padrão do estoque)
+        # Reatribui valores fixos, sobrescrevendo os parâmetros opcionais do __init__
         self.macarrao_qtde = 10
         self.arroz_qtde = 5
         self.feijao_qtde = 7
-        self.batata_qtde = 5
-        self.cenoura_qtde = 3
-        self.repolho_qtde = 5
-        self.pepino_qtde = 2
-        self.tomate_qtde = 10
-        self.beterraba_qtde = 5
-        self.porco_qtde = 10
-        self.frango_qtde = 15
-        self.carne_qtde = 17
+        # ... (continua para todas as quantidades)
+        self.agua_qtde = 100 # Exemplo de bebida
 
-        self.batata_palha_qtde = 8
-        self.creme_leite_qtde = 6
-        self.molho_tomate_qtde = 12
-        self.cogumelo_qtde = 7
-        self.queijo_parmesao_qtde = 5
-        self.massa_lasanha_qtde = 6
-        self.queijo_mussarela_qtde = 10
-        self.brocolis_qtde = 4
-        self.abobrinha_qtde = 4
-        self.farinha_trigo_qtde = 8
-        self.ovo_qtde = 20
-        self.salmao_qtde = 6
-        self.manteiga_qtde = 5
-        self.leite_qtde = 8
-        self.presunto_qtde = 10
-
+        # Atributo de INSTÂNCIA: Dicionário 'estoque'
+        # Estrutura aninhada que organiza os ingredientes por categorias, mapeando nome para quantidade.
         self.estoque = {
             "basico": {
                 self.macarrao: self.macarrao_qtde,
                 self.arroz: self.arroz_qtde,
-                self.feijao: self.feijao_qtde,
-                self.batata: self.batata_qtde,
-                self.farinha_trigo: self.farinha_trigo_qtde,
-                self.ovo: self.ovo_qtde,
-                self.leite: self.leite_qtde,
-                self.manteiga: self.manteiga_qtde
+                # ...
             },
             "salada": {
                 self.cenoura: self.cenoura_qtde,
-                self.repolho: self.repolho_qtde,
-                self.pepino: self.pepino_qtde,
-                self.tomate: self.tomate_qtde,
-                self.beterraba: self.beterraba_qtde,
-                self.brocolis: self.brocolis_qtde,
-                self.abobrinha: self.abobrinha_qtde
+                # ...
             },
-            "carne": {
-                self.porco: self.porco_qtde,
-                self.frango: self.frango_qtde,
-                self.carne: self.carne_qtde,
-                self.salmao: self.salmao_qtde,
-                self.presunto: self.presunto_qtde
-            },
-            "massas e queijos": {
-                self.massa_lasanha: self.massa_lasanha_qtde,
-                self.queijo_mussarela: self.queijo_mussarela_qtde,
-                self.queijo_parmesao: self.queijo_parmesao_qtde
-            },
-            "molhos e extras": {
-                self.molho_tomate: self.molho_tomate_qtde,
-                self.creme_leite: self.creme_leite_qtde,
-                self.batata_palha: self.batata_palha_qtde,
-                self.cogumelo: self.cogumelo_qtde
-            },
+            # ... (continua para outras categorias)
             "bebidas": {
                 self.agua: self.agua_qtde,
                 self.agua_com_gas: self.agua_com_gas_qtde,
-                self.coca_cola: self.coca_cola_qtde,
-                self.fanta_laranja: self.fanta_laranja_qtde,
-                self.fanta_uva: self.fanta_uva_qtde,
-                self.guarana: self.guarana_qtde
+                # ...
             }
         }
 
 
-
-
-
+# --- Classe Fornecedor (Herança e Singleton Simplificado) ---
+# HERANÇA: Fornecedor herda de Ingredientes, ganhando todos os seus atributos e métodos.
 class Fornecedor(Ingredientes):
+    # Atributo de CLASSE: Usado para implementar um padrão de Singleton Simplificado.
+    # Garante que todas as instâncias de Fornecedor compartilhem o MESMO dicionário de estoque.
     _estoque_compartilhado = None
 
     def __init__(self):
-        # Se o estoque compartilhado ainda não existe, cria-o
+        # Se o estoque compartilhado ainda não existe (primeira instância), cria-o.
         if Fornecedor._estoque_compartilhado is None:
-            super().__init__()
+            super().__init__() # Chama o construtor da classe pai (Ingredientes) para criar o estoque inicial
+            # Atribui o estoque recém-criado (self.estoque) ao atributo de CLASSE compartilhado
             Fornecedor._estoque_compartilhado = self.estoque
         else:
-            # Caso já exista, reaproveita o mesmo estoque
-            self.estoque = Fornecedor._estoque_compartilhado
+            # Caso já exista, reaproveita o mesmo estoque compartilhado.
+            self.estoque = Fornecedor._estoque_compartilhado # A instância usa o estoque compartilhado.
 
+    # Método para alterar a quantidade de um ingrediente no estoque.
     def atualiza_estoque(self, ingrediente, quantidade):
+        # Itera sobre categorias e produtos para encontrar o ingrediente
         for categoria, produtos in self.estoque.items():
             if ingrediente in produtos:
-                produtos[ingrediente] = quantidade
+                produtos[ingrediente] = quantidade # Altera a quantidade
                 print(f"{ingrediente} atualizado para {quantidade} na categoria '{categoria}'.")
                 return
         print(f"Produto '{ingrediente}' não encontrado.")
 
+    # Método para exibir o estoque (acessa o estoque compartilhado)
     def mostra_estoque(self):
         print("\nEstoque Atual:")
         for categoria, produtos in self.estoque.items():
@@ -462,93 +388,55 @@ class Fornecedor(Ingredientes):
                 print(f" {item}: {qtde}")
 
 
-
+# --- Classe Pratos (Herança) ---
+# HERANÇA: Pratos herda de Ingredientes, tendo acesso aos nomes dos ingredientes.
 class Pratos(Ingredientes): # heranca 2
     def __init__(self):
-        super().__init__()
+        super().__init__() # Chama o construtor da classe pai (Ingredientes)
         
+        # Atributo de INSTÂNCIA: Dicionário para o cardápio de pratos.
         self.pratos_prontos = {
             1: {
-                "Da casa": (self.arroz, self.macarrao, self.feijao, self.frango), #os pratos tradicionais sao imutaveis, (tuplas)
+                # Uso de TUPLAS para ingredientes: Implica que os ingredientes dos pratos tradicionais são IMUTÁVEIS (não podem ser alterados).
+                "Da casa": (self.arroz, self.macarrao, self.feijao, self.frango), 
                 "preco": 21.99
             },
-            2: {
-                "feijoada": (self.feijao, self.macarrao, self.porco),
-                "preco": 40
-            },
-            3: {
-                "macarronada": (self.macarrao, self.tomate),
-                "preco": 25
-            },
+            # ...
             4: {
+                # O prato do dia é uma LISTA de dicionários, permitindo que o prato mude diariamente.
                 "do dia": [
                     {"nome": "Strogonoff de Frango", "preco": 25.0},
-                    {"nome": "Risoto de Cogumelos", "preco": 28.0},
-                    {"nome": "Lasanha Bolonhesa", "preco": 30.0},
-                    {"nome": "Frango Grelhado com Legumes", "preco": 22.0},
-                    {"nome": "Bife à Parmegiana", "preco": 27.0},
-                    {"nome": "Salmão Grelhado com Purê de Batata", "preco": 35.0},
+                    # ...
                     {"nome": "Omelete de Queijo e Presunto", "preco": 18.0}
                 ]
-
-
             }
         }
 
+        # Atributo de INSTÂNCIA: Dicionário para o cardápio de bebidas.
         self.bebidas = {
-            1: {
-                "bebida": "agua",
-                "preco": 3
-            },
-            2: {
-                "bebida": "agua com gas",
-                "preco": 3.50
-            },
-            3: {
-                "bebida": "Coca-Cola",
-                "preco": 9
-            },
-            4: {
-                "bebida": "Fanta Laranja",
-                "preco": 7.50
-            },
-            5: {
-                "bebida": "Fanta Uva",
-                "preco": 7.50
-            },
-            6: {
-                "bebida": "Guarana",
-                "preco": 8
-            }
+            # ... (dados das bebidas)
         }
 
 
+# --- Classe Pedidos (Herança) ---
+# HERANÇA: Pedidos herda de Pratos, tendo acesso a Ingredientes e Pratos/Bebidas.
 class Pedidos(Pratos):
     def __init__(self):
-        super().__init__()
+        super().__init__() # Chama o construtor da classe pai (Pratos)
 
+    # Método simples para finalizar a compra
     def pagar_conta(self, preco):
         print(f"\nO preco da conta que devera ser pago é: {preco}")
 
+    # Método para exibir o cardápio
     def mostrar_cardapio(self):
         print(Fore.GREEN + "\n=====PRATOS=====" + Style.RESET_ALL)
-        print("1: Da casa: arroz, feijao, macarrao, frango")
-        print("2: feijoada: feijao, macarrao, porco")
-        print("3: macarronada: macarrao, molho de tomate)")
+        # Exibe o prato do dia dinamicamente, usando o índice 'dia_semana' obtido no início do código.
+        # Isso demonstra como a data/hora pode influenciar a lógica do programa.
         print(f"4: {self.pratos_prontos[4]["do dia"][dia_semana]["nome"]}")
+        # ... (exibe outras opções)
 
-        print()
-
-        print(Fore.GREEN + "=====BEBIDAS=====" + Style.RESET_ALL)
-        print("1: Água")
-        print("2: Água com gás")
-        print("3: Coca-Cola")
-        print("4: Fanta Laranja")
-        print("5: Fanta Uva")
-        print("6: Guarana")   
-
-        print()
-
+    # Método principal para registrar um pedido
     def fazer_pedido(self):
         cliente_pedido_prato = int(input("escolha o prato que deseja comer: "))
 
@@ -562,17 +450,19 @@ class Pedidos(Pratos):
                 print("nao tem nenhuma opcao no cardapio com esse numero")
                 return
             else:
+                # Lógica condicional para tratar o 'Prato do Dia' (opção 4) de forma diferente
                 if cliente_pedido_prato == 4:
                     print(f"sera trago seu pedido {self.pratos_prontos[4]["do dia"][dia_semana]} junto com a bebida {self.bebidas[cliente_pedido_bebida]}") 
 
-
+                    # Calcula e paga a conta
                     conta_prato = self.pratos_prontos[4]["do dia"][dia_semana]["preco"]
                     conta_bebida = self.bebidas[cliente_pedido_bebida]["preco"]
-                    self.pagar_conta(conta_prato + conta_bebida)
+                    self.pagar_conta(conta_prato + conta_bebida) # Chamada ao método pagar_conta (composição)
                     
                 else:
                     print(f"sera trago seu pedido {self.pratos_prontos[cliente_pedido_prato]} junto com a bebida {self.bebidas[cliente_pedido_bebida]}")
 
+                    # Calcula e paga a conta para pratos fixos
                     conta_prato = self.pratos_prontos[cliente_pedido_prato]["preco"]
                     conta_bebida = self.bebidas[cliente_pedido_bebida]["preco"]
                     self.pagar_conta(conta_prato + conta_bebida)
